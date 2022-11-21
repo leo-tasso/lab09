@@ -1,6 +1,5 @@
 package it.unibo.oop.reactivegui01;
 
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.lang.reflect.InvocationTargetException;
@@ -71,7 +70,7 @@ public final class ConcurrentGUI extends JFrame {
         public void run() {
             while (!this.stop) {
                 try {
-                    // The EDT doesn't access `counter` anymore, it doesn't need to be volatile 
+                    // The EDT doesn't access `counter` anymore, it doesn't need to be volatile
                     final var nextText = Integer.toString(this.counter);
                     SwingUtilities.invokeAndWait(() -> ConcurrentGUI.this.display.setText(nextText));
                     this.counter++;
@@ -81,7 +80,7 @@ public final class ConcurrentGUI extends JFrame {
                      * This is just a stack trace print, in a real program there
                      * should be some logging and decent error reporting
                      */
-                    ex.printStackTrace();
+                    ex.printStackTrace(); //NOPMD
                 }
             }
         }
