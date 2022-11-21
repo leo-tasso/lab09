@@ -1,15 +1,19 @@
 plugins {
     java
     application
+    id("org.danilopianini.gradle-java-qa") version "0.40.0"
 }
+
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.7.3")
     // Use JUnit Jupiter API for testing.
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
 
