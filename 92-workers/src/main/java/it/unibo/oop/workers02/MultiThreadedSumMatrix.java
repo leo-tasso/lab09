@@ -14,11 +14,10 @@ class MultiThreadedSumMatrix implements SumMatrix {
     public double sum(final double[][] matrix) {
         int dim = 0;
         for (final double[] l : matrix) {
-            for (final double d : l) {
-                dim += d;
-            }
+            dim += l.length;
         }
-        final int size = dim / nthread;
+
+        final int size = dim % nthread + dim / nthread;
 
         final List<Worker> workers = new ArrayList<>();
         int row = 0, col = 0;
@@ -62,14 +61,15 @@ class MultiThreadedSumMatrix implements SumMatrix {
 
         @Override
         public void run() {
-            final int cursor = 0;
-            while (cursor <= steps && (rstart < matrix.length - 1 || cstart < matrix[matrix.length - 1].length)) {
+            int cursor = 0;
+            while (cursor < steps && (rstart < matrix.length - 1 || cstart < matrix[matrix.length - 1].length)) {
                 if (cstart >= matrix[rstart].length) {
                     rstart++;
                     cstart = 0;
                 }
                 sum += matrix[rstart][cstart];
                 cstart++;
+                cursor++;
             }
         }
 

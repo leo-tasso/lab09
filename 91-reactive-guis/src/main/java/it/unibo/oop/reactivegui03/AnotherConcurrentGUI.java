@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
  */
 public final class AnotherConcurrentGUI extends JFrame {
 
+    private static final int WAIT = 10_000;
     private static final long serialVersionUID = 1L;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
@@ -24,6 +25,7 @@ public final class AnotherConcurrentGUI extends JFrame {
     private final JButton up = new JButton("up");
     private final JButton down = new JButton("down");
     private final transient Agent a;
+
     /**
      * Constructor and initializer.
      */
@@ -50,19 +52,27 @@ public final class AnotherConcurrentGUI extends JFrame {
         });
         new Thread(a).start();
 
-        final StopperAgent s = new StopperAgent(this);
-        new Thread(s).start();
+        //final StopperAgent s = new StopperAgent(this);
+        new Thread(() -> {
+            try {
+                Thread.sleep(WAIT);
+                this.stop();
+            } catch (InterruptedException e) {
+                e.printStackTrace(); // NOPMD
+            }
+        }).start();
     }
-/**
- * stops the counter.
- */
+
+    /**
+     * stops the counter.
+     */
     public synchronized void stop() {
         a.setRunning(false);
         up.setEnabled(false);
         down.setEnabled(false);
         stop.setEnabled(false);
     }
-
+/*
     private static class StopperAgent implements Runnable {
 
         private static final int WAIT = 10_000;
@@ -78,15 +88,15 @@ public final class AnotherConcurrentGUI extends JFrame {
                 Thread.sleep(WAIT);
                 a.stop();
             } catch (InterruptedException e) {
-                e.printStackTrace(); //NOPMD
+                e.printStackTrace(); // NOPMD
             }
         }
 
     }
-
+*/
     private class Agent implements Runnable {
-        private boolean dir = true;
-        private boolean running = true;
+        private volatile boolean dir = true;
+        private volatile boolean running = true;
         private double counter;
 
         @Override
@@ -102,7 +112,7 @@ public final class AnotherConcurrentGUI extends JFrame {
                     SwingUtilities.invokeAndWait(() -> AnotherConcurrentGUI.this.display.setText(nextText));
                     Thread.sleep(100);
                 } catch (InvocationTargetException | InterruptedException ex) {
-                    ex.printStackTrace(); //NOPMD
+                    ex.printStackTrace(); // NOPMD
                 }
             }
         }

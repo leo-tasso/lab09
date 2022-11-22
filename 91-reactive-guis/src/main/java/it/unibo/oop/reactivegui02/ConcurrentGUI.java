@@ -54,8 +54,8 @@ public final class ConcurrentGUI extends JFrame {
     }
 
     private class Agent implements Runnable {
-        private boolean dir = true;
-        private boolean running = true;
+        private volatile boolean dir = true;
+        private volatile boolean running = true;
         private double counter;
 
         @Override
