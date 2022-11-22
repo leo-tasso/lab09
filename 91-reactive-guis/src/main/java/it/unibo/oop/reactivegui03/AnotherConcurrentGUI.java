@@ -72,7 +72,7 @@ public final class AnotherConcurrentGUI extends JFrame {
         down.setEnabled(false);
         stop.setEnabled(false);
     }
-/*
+/* REFACTORED WITH LAMBDA
     private static class StopperAgent implements Runnable {
 
         private static final int WAIT = 10_000;
